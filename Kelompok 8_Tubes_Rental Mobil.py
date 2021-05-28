@@ -230,3 +230,74 @@ def fail_pw():
     print("==== Gagal mengganti password! ====")
     print("===================================")
     print("\n\nTekan Enter!")
+
+def tunai():
+    print()
+    bill = int(input("Masukkan jumlah tagihan [ex:100000] : "))
+    bayar = int(input("Masukkan jumlah uang yang dibayarkan : "))
+    change = bayar - bill
+    print("Anda berhasil membayar tagihan sebesar Rp %d" % bill)
+    if(change == 0):
+        print("terima kasih telah membayar dengan uang pas!")
+    elif(change > 0):
+        print("Jangan lupa ambil kembalian anda sebesar Rp %d, terima kasih!" % change)
+    else:
+        print("Bayar dengan jumlah uang yang sesuai!")
+        pembayaran()
+
+def nontunai():
+    print("\n=== Metode bayar non tunai ===")
+    print("1. Kartu Kredit")
+    print("2. Kartu Debit")
+    print("3. Gopay")
+    print("4. OVO")
+    print("5. Shopee Pay")
+    print("6. Dana")
+    met = int(input("Pilih nomor metode bayar yang diinginkan [1/2/3/4/5/6] : "))
+    if(met == 1):
+        bill = int(input("Masukkan jumlah tagihan [ex:100000] : "))
+        rek = str(input("Masukkan nomor rekening anda : "))
+        idkartu = str(input("Masukkan nama pemilik kartu rekening : "))
+        bank = str(input("Masukkan nama bank : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        time.sleep(5)
+        print("Pembayaran melalui kartu kredit bank %s nomor rekening %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (bank, rek, idkartu, bill))
+    elif(met == 2):
+        bill = int(input("Masukkan jumlah tagihan [ex:100000] : "))
+        rek = str(input("Masukkan nomor rekening anda : "))
+        idkartu = str(input("Masukkan nama pemilik kartu rekening : "))
+        bank = str(input("Masukkan nama bank : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        time.sleep(5)
+        print("Pembayaran melalui kartu debit bank %s nomor rekening %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (bank, rek, idkartu, bill))
+    elif(met == 3):
+        bill = int(input("Masukkan jumlah tagihan [ex:100000] : "))
+        no = str(input("Masukkan nomor Gopay anda : "))
+        id = str(input("Masukkan nama pemilik akun Gopay : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        time.sleep(5)
+        print("Pembayaran melalui Gopay %d atas nama %s sebesar Rp %d berhasil dibayarkan!" % (no, id, bill))
+    elif(met == 4):
+        bill = int(input("Masukkan jumlah tagihan [ex:100000] : "))
+        no = str(input("Masukkan nomor OVO anda : "))
+        id = str(input("Masukkan nama pemilik akun OVO : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        time.sleep(5)
+        print("Pembayaran melalui OVO %d atas nama %s sebesar Rp %d berhasil dibayarkan!" % (no, id, bill))
+    elif(met == 5):
+        bill = int(input("Masukkan jumlah tagihan [ex:100000] : "))
+        no = str(input("Masukkan nomor Shopee Pay anda : "))
+        id = str(input("Masukkan nama pemilik akun Shopee Pay : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        time.sleep(5)
+        print("Pembayaran melalui Shopee Pay %d atas nama %s sebesar Rp %d berhasil dibayarkan!" % (no, id, bill))
+    elif(met == 6):
+        bill = int(input("Masukkan jumlah tagihan [ex:100000] : "))
+        no = str(input("Masukkan nomor Dana anda : "))
+        id = str(input("Masukkan nama pemilik akun Dana : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        time.sleep(5)
+        print("Pembayaran melalui Dana %d atas nama %s sebesar Rp %d berhasil dibayarkan!" % (no, id, bill))
+    else:
+        print("Input salah!")
+        pembayaran()
