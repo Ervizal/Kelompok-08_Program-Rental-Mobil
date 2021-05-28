@@ -74,3 +74,78 @@ def custT():
     # else:
     #     print("Email yang anda masukkan salah!")
     #     custT()
+    # append data ke csv atau excel
+
+
+def login_berhasil():
+    os.system("cls")
+    print("==== Login Berhasil! ====\n")
+    time.sleep(1)
+
+
+def login_gagal():
+    os.system("cls")
+    print("==== Login Gagal! ====\n")
+    time.sleep(1)
+
+
+def menu_cust():
+    os.system("cls")
+    print("============================")
+    print("==== Selamat Datang %s! ====" % username)
+    print("============================")
+    print("1. Penyewaan mobil")
+    print("2. Pengembalian mobil")
+
+
+def menu_sewa():
+    os.system("cls")
+    print("========================")
+    print("==== Menu Persewaan ====")
+    print("========================")
+    # tampilkan kendaraan yang tersedia dan harga sewa nya
+
+
+def menu_pengembalian():
+    os.system("cls")
+    print("===========================")
+    print("==== Menu Pengembalian ====")
+    print("===========================")
+
+
+# mencari data mobil yang disewa dengan plat nomor, lalu statusnya diubah menjadi "Tersedia", dan nama penyewa diganti "-"
+
+def login_admin():
+    os.system("cls")
+    pw1 = "Admin123"
+    pw2 = "Admin123"
+    log = True
+    print("=====================")
+    print("==== Login Admin ====")
+    print("=====================")
+    while True:
+        try:
+            user = str(input("Username : "))
+            password = str(input("Password : "))
+        except:
+            loading()
+            print("\n==== Maaf Username atau Password Anda Salah! ====")
+        else:
+            if ((user == pw1) and (password == pw2)):
+                log = True
+                break
+            else:
+                loading()
+                print("\n==== Maaf Username atau Password Anda Salah! ====")
+                log = False
+                pass
+    loading()
+    return log, True
+
+
+def data_kendaraan():
+    os.system("cls")
+    kendaraan = pd.read_excel("data_kendaraan.xlsx", sheetname="Sheet1")
+    for jumlah in kendaraan:
+        print("jumlah")
+    # menyimpan data kendaraan di excel atau csv (sebisa mungkin excel shg menggunakan pandas sambil mempelajari pandas
