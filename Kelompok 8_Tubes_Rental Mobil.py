@@ -74,6 +74,8 @@ def custT():
     # else:
     #     print("Email yang anda masukkan salah!")
     #     custT()
+
+
     # append data ke csv atau excel
 
 
@@ -149,3 +151,82 @@ def data_kendaraan():
     for jumlah in kendaraan:
         print("jumlah")
     # menyimpan data kendaraan di excel atau csv (sebisa mungkin excel shg menggunakan pandas sambil mempelajari pandas
+
+
+def pesan():
+    os.system("cls")
+    print("========================")
+    print("==== Menu Persewaan ====")
+    print("========================")
+    # memilih mobil yang tersedia, lalu pengisian biodata, pembayaran dll
+
+
+def booking():
+    os.system("cls")
+    print("======================")
+    print("==== Menu Booking ====")
+    print("======================")
+    # mencari mobil berdasarkan plat nomor, lalu status diubah menjadi disewakan pada .... hingga ....
+
+def menu_admin():
+    print("====================")
+    print("==== Menu Admin ====")
+    print("====================")
+    print("1. Menambah armada")
+    print("2. Mengurangi armada")
+    print("3. Update harga sewa")
+    ma = int(input("Masukkan menu yang anda pilih : "))
+    return ma
+
+
+def T_armada():
+    print("========================")
+    print("==== Kurangi Armada ====")
+    print("========================")
+    data_kendaraan()
+    jml = int(input("Masukkan jumlah armada yang akan dikurangi : "))
+    # menambahkan data mobil ke database csv
+
+
+def K_armada():
+    print("=======================")
+    print("==== Kurangi Armada ====")
+    print("=======================")
+    n = int(input("Masukkan nomor mobil yang akan dijual : "))
+    # menghapus data mobil berdasarkan pencarian plat nomor
+
+
+def U_harga():
+    print("======================")
+    print("==== Update Harga ====")
+    print("======================")
+
+
+def pengembalian():
+    print("===========================")
+    print("==== Menu Pengembalian ====")
+    print("===========================")
+    # mencari mobil berdasarkan plat lalu diganti statusnya menjadi tersedia
+
+
+def lupa_pw():
+    print("============================")
+    print("==== Menu Lupa Password ====")
+    print("============================")
+    uname = str(input("Masukkan username anda : "))
+    id = str(input("Masukkan no. id anda (KTP/SIM) : "))
+    # cari unamenya, if id == no_id then fix pilih data dan ganti
+
+
+def succ_pw():
+    print("====================================")
+    print("==== Password berhasil diganti! ====")
+    print("====================================")
+    print("\n\nTekan Enter!")
+
+
+def fail_pw():
+    print("===================================")
+    print("==== Gagal mengganti password! ====")
+    print("===================================")
+    print("\n\nTekan Enter!")
