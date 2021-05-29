@@ -301,3 +301,70 @@ def nontunai():
     else:
         print("Input salah!")
         pembayaran()
+        
+def pembayaran():
+    print("=== Pembayaran ===")
+    print("1. Tunai")
+    print("2. Non tunai")
+    byr = int(input("Pilih metode pembayaran [1/2] : "))
+    if(byr == 1):
+        tunai()
+    elif(byr == 2):
+        nontunai()
+    else:
+        print("Masukkan input yang valid!")
+
+def loading():    
+    done = False
+    def animate():
+        for c in itertools.cycle(['|', '/', '-', '\\']):
+            if done:
+                break
+            sys.stdout.write('\rloading ' + c)
+            sys.stdout.flush()
+            time.sleep(0.1)
+    t = threading.Thread(target=animate)
+    t.start()
+    time.sleep(5)
+    done = True  
+   
+
+
+#Bagian Program Utama   
+lagi = "Y"  
+while (lagi == "Y"):  
+    os.system("cls")
+    judul()
+    ut = 0
+    ut = menu_utama()
+    if(ut == 1):
+        stat_akun = login_cust()
+        if(stat_akun.upper() == "Y"):
+            custY()
+        elif(stat_akun.upper() == "T"):
+            custT()
+        else:
+            print("Input anda salah!")
+    elif(ut == 2):
+        log, st = login_admin()
+        if(log == True):
+            login_berhasil()
+            ma = menu_admin()
+            if(ma == 1):
+                T_armada() 
+            elif(ma == 2):
+                K_armada()
+            elif(ma == 3):
+                U_harga()
+            else:
+                print("Input anda salah!")
+                menu_admin()
+        else:
+            raise Exception("==== Maaf Username atau Password Anda Salah! ====")
+    elif(ut == 3):
+        print("Terima kasih telah menggunakan program kami, sampai jumpa kembali!")
+        print("Program ditutup...")
+        sys.exit()
+    else:
+        print("Input anda salah!")
+    print("Sampai jumpa kembali!\n")
