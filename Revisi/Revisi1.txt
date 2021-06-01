@@ -1,0 +1,6 @@
+1. Menu CustY silakan diselesaikan
+2. Menu CustT juga silakan diselesaikan
+3. Pada menu menu_cust terdapat variable username yang belum didefiniskan, jangan lupa didefinisikan
+4. Untuk login admin tolong diperjelas variabel mana yang menjadi uname dan password atau mungkin bisa buat file .txt untuk sekadar memberi tahu uname dan password admin
+5. Sisanya tolong dilanjutkan yaa
+6. KEEP UP THE GOOD WORK!!
