@@ -200,7 +200,21 @@ def U_harga():
     print("======================")
     print("==== Update Harga ====")
     print("======================")
+    pd.options.mode.chained_assignment = None
+    data = pd.read_excel("data_kendaraan.xlsx", index_col="No", sheet_name="Sheet1", header=0, )
+    df = pd.DataFrame(data)
+    print(df)
 
+    up = int(input("Mobil yang akan di update harga[ex:1]:"))
+    # print("Berikut data mobil yang Anda sewa:")
+    print(df.iloc[up - 1])
+    harga_baru = str(input("Masukkan harga mobil terbaru:"))
+    # ubah harga mobil
+    df["Harga"][up] = harga_baru
+    export5=pd.ExcelWriter("data_kendaraan.xlsx")
+    df.to_excel(export5)
+    export5.save()
+    print(df)
 
 def pengembalian():
     print("===========================")
