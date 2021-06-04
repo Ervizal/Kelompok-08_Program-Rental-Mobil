@@ -181,10 +181,31 @@ def menu_admin():
 
 def T_armada():
     print("========================")
-    print("==== Kurangi Armada ====")
+    print("==== Tambah Armada ====")
     print("========================")
-    data_kendaraan()
-    jml = int(input("Masukkan jumlah armada yang akan dikurangi : "))
+    #data_kendaraan()
+    pd.options.mode.chained_assignment = None
+    data = pd.read_excel("data_kendaraan.xlsx", header=0, )
+    df = pd.DataFrame(data)
+    print(df)
+
+    # tambah mobil
+    print("=====Masukkan data mobil baru=====")
+    mob = str(input("Masukkan jenis mobil: "))
+    hrg = str(input("Masukkan harga sewa mobil: "))
+    thn = str(input("Masukkan tahun mobil: "))
+    kap = str(input("Masukkan kapasitas penumpang mobil: "))
+    no_pol= str(input("Masukkan nomor polisi mobil: "))
+    stat = "Tersedia"
+    mobil_baru = [mob, hrg,thn,kap,no_pol,stat]
+    jlh_mbl = len(df["Harga"])
+    print("Jumlah mobil saat ini", jlh_mbl)
+    df.loc[jlh_mbl + 1] = mobil_baru
+    print(df)
+    export3 = pd.ExcelWriter("data_kendaraan.xlsx")
+    df.to_excel(export3)
+    export3.save()
+    print(df)
     # menambahkan data mobil ke database csv
 
 
@@ -192,8 +213,33 @@ def K_armada():
     print("=======================")
     print("==== Kurangi Armada ====")
     print("=======================")
-    n = int(input("Masukkan nomor mobil yang akan dijual : "))
-    # menghapus data mobil berdasarkan pencarian plat nomor
+    #data_kendaraan()
+    pd.options.mode.chained_assignment = None
+    data = pd.read_excel("data_kendaraan.xlsx", header=0)
+    df = pd.DataFrame(data)
+    print(df.to_string(index=False))
+    while True:
+        try:
+            jml = int(input("Pilih nomor kendaraan yang akan dikurangi: "))
+        except:
+            print("Mohon masukkan angka saja")
+        else:
+            break
+    pd.options.mode.chained_assignment = None
+
+    df = df.drop(jml - 1)
+    df["No"] = [x for x in range(1, len(df) + 1)]
+    print(df.to_string(index=False))
+
+    hps = int(input("Masukkan nomor mobil yang akan dihapus:"))
+    #df.drop([hps], axis=0, inplace=True)
+
+    df=df.reset_index(drop=True)
+    print("Data mobil terbaru:", df.to_string(index=False))
+    export4 = pd.ExcelWriter("data_kendaraan.xlsx")
+    df.to_excel(export4)
+    export4.save()
+    print(df)
 
 
 def U_harga():
