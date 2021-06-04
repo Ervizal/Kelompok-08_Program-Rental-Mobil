@@ -216,6 +216,44 @@ def U_harga():
     export5.save()
     print(df)
 
+def C_typo():
+    print("======================")
+    print("==== Correcting Typo ====")
+    print("======================")
+    pd.options.mode.chained_assignment = None
+    data = pd.read_excel("data_kendaraan.xlsx", index_col="No", sheet_name="Sheet1", header=0, )
+    df = pd.DataFrame(data)
+    print(df)
+
+    update = int(input("Mobil yang akan diubah datanya[ex:1]:"))
+    print("Berikut data mobil yang ingin Anda ubah:")
+    print(df.iloc[update - 1])
+    jns_baru = str(input("Masukkan jenis mobil terbaru:"))
+    hra_baru = str(input("Masukkan harga mobil terbaru:"))
+    thn_baru = str(input("Masukkan tahun mobil terbaru:"))
+    kap_baru = str(input("Masukkan kapasitas mobil terbaru:"))
+    nopol_baru = str(input("Masukkan no polisi mobil terbaru:"))
+    stat_baru = str(input("Masukkan status mobil terbaru:"))
+
+    # ubah data mobil
+    df["Jenis"][update] = jns_baru
+    df["Harga"][update] = hra_baru
+    df["Tahun"][update] = thn_baru
+    df["Kapasitas"][update] =kap_baru
+    df["No Polisi"][update] =nopol_baru
+    df["Status"][update] =stat_baru
+    export6=pd.ExcelWriter("data_kendaraan.xlsx")
+    df.to_excel(export6)
+    export6.save()
+    print(df.to_string(index=False))
+
+
+
+T_armada()
+K_armada()
+U_harga()
+C_typo()
+
 def pengembalian():
     print("===========================")
     print("==== Menu Pengembalian ====")
