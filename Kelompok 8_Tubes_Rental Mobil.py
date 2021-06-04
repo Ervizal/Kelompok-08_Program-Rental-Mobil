@@ -44,11 +44,51 @@ def custY():
     print("========================")
     print("==== Login customer ====")
     print("========================")
-    # open data login dari csv atau excel
-    user = str(input("username : "))
-    password = str(input("password : "))
+    pd.options.mode.chained_assignment = None  # default='warn', supaya tdk ada warning saat mengganti value
 
-    # if username dan password sama dengan di csv atau excel then
+    # nama file
+    file = "data_pelanggan.xlsx"
+
+    # import dari xlsx yang sudah ada
+    data_pelanggan = pd.read_excel(file, index_col="No").loc[:, "Nama":]
+    df = pd.DataFrame(data_pelanggan)
+
+    # mengecek data
+    lgn = True
+    while True:
+        try:
+            username = str(input("Username : "))
+            password = str(input("Password: "))
+        except:
+            loading()
+            print("\n==== Maaf Username atau Password Anda Salah! ====\n")
+        else:
+            aa, n_m = cek_login(username, password, df)
+            if(aa == True):
+                lgn = True
+                break
+            else:
+                loading()
+                print("\n==== Maaf Username atau Password Anda Salah! ====\n")
+                lgn = False
+                pass
+    loading()
+    return lgn, True, n_m
+
+
+def cek_login(p, q, r):
+    un = p
+    pa = q
+    df = r
+    for i in range (1, len(df["Username"])+1):
+        if((un == df["Username"][i]) and (pa == df["Password"][i])):
+            nm = df["Nama"][i]
+            aa = True
+            break
+        else:
+            nm = "Not Found!"
+            aa = False
+    return aa, nm
 
 
 def custT():
@@ -426,11 +466,51 @@ def loading():
     time.sleep(5)
     done = True  
    
+   
+def struk(a, b, c, d, e, f, g, h, i, j, k):
+    nama = a
+    nik = b
+    kendaraan = c
+    plat = d
+    tanggal_pinjam = e
+    tanggal_kembali = f
+    jenis_pembayaran = g #DP awal / pelunasan
+    metode = h #tunai/non tunai
+    via = i #ovo gopay dll
+    no = j #no akun
+    nominal = k
+    print("\tPT NGABERS BRAKTAKTAK AND FRENDS")
+    print("Sewa Mobil")
+    print("===========================================")
+    print("%s\t\t%s" % (nama, nik))
+    print("===========================================")
+    print("Kendaraan\t:\t%s" % kendaraan)
+    print("No Polisi\t:\t%s" % plat)
+    print("Tanggal Pinjam\t:\t", tanggal_pinjam)
+    print("Tanggal Kembali\t:\t", tanggal_kembali)
+    print("===========================================")
+    print("=============== %s ===============" % jenis_pembayaran)
+    print("Dibayar dengan\t:\t%s" % metode)
+    if(metode == "Non Tunai"):
+        print("Via\t:\t%s" % via)
+        print("Nomor akun\t:\t%s" % no)
+    print("Nominal dibayarkan\t:\t%s" % nominal)
 
+
+def cust_byr(i, j, k, l, m, n):
+    jns, lama, hrg, denda, tsewa, tbalik = i, j, k, l, m, n
+    asuransi = 0.1*hrg
+    total = 0
+    if(jns == "DP Awal"):
+        total = (asuransi + (0.5*hrg))
+    elif(jns == "Pelunasan"):
+        total = (0.5*hrg) + denda
+    return total, jns, tsewa, tbalik
+    
 
 #Bagian Program Utama   
 lagi = "Y"  
-while (lagi == "Y"):  
+while (lagi == "Y"): 
     os.system("cls")
     judul()
     ut = 0
@@ -438,7 +518,16 @@ while (lagi == "Y"):
     if(ut == 1):
         stat_akun = login_cust()
         if(stat_akun.upper() == "Y"):
-            custY()
+            akunY, tr, user = custY()
+            if(akunY == True):
+                login_berhasil()
+                chs = menu_cust(user)
+                if(chs == 1):
+                    menu_sewa()
+                elif(chs == 2):
+                    menu_pengembalian()
+                else:
+                    print("Input anda salah!")                  
         elif(stat_akun.upper() == "T"):
             custT()
         else:
@@ -465,4 +554,4 @@ while (lagi == "Y"):
         sys.exit()
     else:
         print("Input anda salah!")
-    print("Sampai jumpa kembali!\n")
+    print("\n[  Sampai jumpa kembali!  ]\n")
