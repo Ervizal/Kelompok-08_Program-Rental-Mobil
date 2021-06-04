@@ -25,7 +25,17 @@ def menu_utama():
     print("1. Login customer")
     print("2. Login admin")
     print("3. Exit program")
-    ut = int(input("Masukkan menu yang anda pilih (1/2/3) : "))
+    while True:
+        try:
+            ut = int(input("Masukkan menu yang anda pilih (1/2/3) : "))
+        except:
+            print("Mohon masukkan angka 1/2/3")
+        else:
+            if ut in [1, 2, 3]:
+                break
+            else:
+                print("Mohon masukkan angka 1/2/3")
+                pass
     return ut
 
 
@@ -34,9 +44,14 @@ def login_cust():
     print("========================")
     print("==== Login customer ====")
     print("========================")
-    stat_akun = str(input("Apakah anda sudah memiliki akun (Y/T) : "))
+    stat_akun = 0
+    while True:
+        if stat_akun == "Y" or stat_akun == "T":
+            break
+        else:
+            stat_akun = input("Apakah anda sudah memiliki akun (Y/T) : ")
+            stat_akun = stat_akun.upper()
     return stat_akun
-    # if(akun.upper == "Y"):    lanjutan
 
 
 def custY():
@@ -97,23 +112,30 @@ def custT():
     print("========================")
     print("==== Pembuatan akun ====")
     print("========================")
-    # open data csv atau excel
-    # mode append pada data
-    user = str(input("username : "))
-    password = str(input("password : "))
-    nama = str(input("nama lengkap : "))
-    alamat = str(input("alamat : "))
-    jenis_kelamin = str(input("jenis kelamin : "))
-    identitas = str(input("pilih kartu identitas (SIM/KTP/PASPOR) : "))
-    no_id = str(input("no identitas %s : " % identitas))
-    email = str(input("email : "))
+    file = "data_pelanggan.xlsx"
+    data_pelanggan = pd.read_excel(file)
+    df = pd.DataFrame(data_pelanggan)
+
+    while True:
+        user = input("username : ")
+        if user in list(df["Username"].values):
+            print("username sudah ada")
+        else:
+            break
+    password = input("password : ")
+    nama = input("nama lengkap : ")
+    alamat = input("alamat : ")
+    jenis_kelamin = input("jenis kelamin : ")
+    identitas = input("pilih kartu identitas (SIM/KTP/PASPOR) : ")
+    no_id = input("no identitas %s : " % identitas)
+    email = input("email : ")
     while validate_email(email) == False:
         email = str(input("masukkan email yang tepat : "))
-    # if (val == True):
-    #     pass
-    # else:
-    #     print("Email yang anda masukkan salah!")
-    #     custT()
+
+    df.loc[len(df.index)] = [len(df) + 1, nama, identitas, no_id, user, password, email, alamat, jenis_kelamin]
+    export = pd.ExcelWriter(file)
+    df.to_excel(export, index=False)
+    export.save()
 
 
     # append data ke csv atau excel
@@ -193,13 +215,68 @@ def data_kendaraan():
     # menyimpan data kendaraan di excel atau csv (sebisa mungkin excel shg menggunakan pandas sambil mempelajari pandas
 
 
-def pesan():
-    os.system("cls")
+def pemesanan(akun, nama):
     print("========================")
-    print("==== Menu Persewaan ====")
+    print("==== Menu Pemesanan ====")
     print("========================")
-    # memilih mobil yang tersedia, lalu pengisian biodata, pembayaran dll
+    data_mobil = pd.read_excel("data_kendaraan.xlsx")
+    df = pd.DataFrame(data_mobil)
+    kolom = df.columns.tolist()
+    kolom.remove("Penyewa")
+    print(df.to_string(index=False, columns=kolom))
+    while True:
+        try:
+            no_mobil = int(input("Masukkan nomor mobil yang anda pilih: "))
+        except:
+            print("Mohon masukkan angka")
+        else:
+            if no_mobil in range(1, len(df)+1):
+                break
+            else:
+                print("Mohon masukkan angka sesuai tabel")
+                pass
+    index_mobil = no_mobil - 1
+    sel = df["Penyewa"][index_mobil]
+    sel = sel.replace("\'", "\"")
+    sel_dict = json.loads(sel)
+    tgl_awal = datetime.datetime.now()
+    while True:
+        tgl = int(input("Masukkan tanggal pengembalian(1-31): "))
+        bln = int(input("Masukkan bulan pengembalian(1-12): "))
+        thn = int(input("Masukkan tahun pengembalian(YYYY): "))
+        if tgl in range(1, 32) and bln in range(1, 13) and thn in range(2021, 2025):
+            break
+        else:
+            print("Mohon masukkan tanggal, bulan, dan tahun dengan benar!")
+            pass
 
+    tgl_akhir = f"{str(tgl).zfill(2)}/{str(bln).zfill(2)}/{thn}"
+    sel_dict.update({akun: [tgl_awal.strftime("%d/%m/%Y"), tgl_akhir]})
+    df["Penyewa"][index_mobil] = sel_dict
+    print(df.to_string(index=False))
+    d1, d2 = df["Penyewa"][index_mobil][akun]
+    tgl1, bln1, thn1 = d1.split("/")
+    d1 = date(int(thn1), int(bln1), int(tgl1))
+    tgl2, bln2, thn2 = d2.split("/")
+    d2 = date(int(thn2), int(bln2), int(tgl2))
+    d3 = d2 - d1
+    lama_hari = d3.days
+    print(f"Anda akan menyewa {df['Jenis'][index_mobil]} selama {lama_hari} hari")
+    while True:
+        lanjut = input("Apakah anda melanjutkan ke tahap pembayaran?(Y/T): ")
+        if lanjut.upper() == "T":
+            del df["Penyewa"][index_mobil][akun]
+            print("Silahkan melakukan input ulang")
+            pemesanan(akun, nama)
+        elif lanjut.upper() == "Y":
+            df["Status"][index_mobil] = f"Disewakan kepada {nama}"
+            export = pd.ExcelWriter("data_kendaraan.xlsx")
+            df.to_excel(export, index=False)
+            export.save()
+            break
+        else:
+            print("Mohon masukkan (Y/T)")
+    return True
 
 def booking():
     os.system("cls")
@@ -335,17 +412,48 @@ def C_typo():
 
 
 
-T_armada()
-K_armada()
-U_harga()
-C_typo()
+# T_armada()
+# K_armada()
+# U_harga()
+# C_typo()
 
-def pengembalian():
-    print("===========================")
-    print("==== Menu Pengembalian ====")
-    print("===========================")
-    # mencari mobil berdasarkan plat lalu diganti statusnya menjadi tersedia
-
+def pengembalian(akun,nama):
+    print("=========================")
+    print("=== Menu Pengembalian ===")
+    print("=========================")
+    data_mobil = pd.read_excel("data_kendaraan.xlsx")
+    df = pd.DataFrame(data_mobil)
+    kolom = df.columns.tolist()
+    kolom.remove("Penyewa")
+    print(df.to_string(index=False, columns=kolom))
+    while True:
+        while True:
+            try:
+                no_mobil = int(input("Masukkan nomor mobil yang akan anda kembalikan: "))
+            except:
+                print("Mohon masukkan angka")
+            else:
+                if no_mobil in range(1, len(df) + 1):
+                    break
+                else:
+                    print("Mohon masukkan angka sesuai tabel")
+                    pass
+        index_mobil = no_mobil - 1
+        if df["Status"][index_mobil] == f"Disewakan kepada {nama}":
+            print("betul")
+            df["Status"][index_mobil] = "Tersedia"
+            sel = df["Penyewa"][index_mobil]
+            sel = sel.replace("\'", "\"")
+            sel_dict = json.loads(sel)
+            df["Penyewa"][index_mobil] = sel_dict
+            del df["Penyewa"][index_mobil][akun]
+            print(df.to_string(index=False))
+            export = pd.ExcelWriter("data_kendaraan.xlsx")
+            df.to_excel(export, index=False)
+            export.save()
+            break
+        else:
+            print("Mohon masukkan nomor mobil yang tepat")
 
 def lupa_pw():
     print("============================")
