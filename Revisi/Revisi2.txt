@@ -1,0 +1,5 @@
+1. Menu untuk menambah daftar pelanggan sudah sukses, tapi untuk login pelanggan masih terdapat error sehingga program berhenti
+2. menu menambah kendaran juga masih error, kemungkinan karena penambahan kolom baru
+3. menu pengurangan kendaraan dan update harga sudah sukses, good job!
+4. menu pemesanan dan lain lain belum bisa dicek terkait poin 1
+
