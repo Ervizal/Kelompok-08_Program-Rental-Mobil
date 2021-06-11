@@ -768,3 +768,163 @@ def pembayaran(total):
                 pj == True
     print("\n")
     return byr_stat, total, via, no, idrek
+
+def loading():
+    done = False
+
+    def animate():
+        for c in itertools.cycle(['|', '/', '-', '\\']):
+            if done:
+                break
+            sys.stdout.write('\rloading ' + c)
+            sys.stdout.flush()
+            time.sleep(0.1)
+
+    t = threading.Thread(target=animate)
+    t.start()
+    time.sleep(4)
+    done = True
+
+
+def processing_bayar():
+    done = False
+
+    def animate():
+        for c in itertools.cycle(['|', '/', '-', '\\']):
+            if done:
+                break
+            sys.stdout.write('\rmemproses pembayaran ' + c)
+            sys.stdout.flush()
+            time.sleep(0.1)
+
+    t = threading.Thread(target=animate)
+    t.start()
+    time.sleep(5)
+    done = True
+
+
+def struk(nama, j_identitas, n_identitas, kendaraan, plat, tgl_awal, tgl_akhir, jenis_pembayaran, byr_stat, via, total,
+          idrek, lama_hari):
+    os.system("cls")
+    judul = "PT NGABERS BRAKTAKTAK AND FRENDS"
+    address = "Jl. Jalan Terus Biar Asik No. 12 Kota Surabaya"
+    thx = "Terima Kasih Telah Menyewa!"
+    print("=====================================================")
+    print(judul.center(53))
+    print(address.center(53))
+    print()
+    print("Sewa Mobil")
+    print("=====================================================")
+    print("%s\t\t %s : %s" % (nama.title(), j_identitas.upper(), n_identitas))
+    print("=====================================================")
+    print("Kendaraan\t\t:\t%s" % kendaraan)
+    print("No Polisi\t\t:\t%s" % plat)
+    print("Tanggal Pinjam\t:\t" + str(tgl_awal))
+    print("Tanggal Kembali\t:\t" + str(tgl_akhir))
+    print("Lama Sewa\t\t:\t%d Hari" % lama_hari)
+    print("=====================================================")
+    print("______________________ %s ______________________" % jenis_pembayaran)
+    print("Dibayar dengan\t:\t%s" % byr_stat)
+    if (byr_stat == "Non Tunai"):
+        print("Via\t\t:\t%s" % via)
+        print("Nomor akun\t:\t%s" % no)
+        print("Atas nama\t:\t%s" % idrek)
+    print("Nominal bayar\t:\tRp %s\n" % total)
+    print("=====================================================")
+    print("============ Terima Kasih Telah Menyewa! ============")
+    print("=====================================================\n")
+
+
+def cust_byr(jenis_pembayaran, bill, lama_hari):
+    bill = int(bill)
+    asuransi = 0.1 * bill
+    total = 0
+    if (jenis_pembayaran == "DP Awal"):
+        total = (asuransi + (0.5 * bill * lama_hari))
+    elif (jenis_pembayaran == "Pelunasan"):
+        denda = int(input("Masukkan jumlah denda : "))
+        total = (0.5 * bill * lama_hari) + denda
+    return total, jenis_pembayaran
+
+#Bagian Program Utama
+lagi = "Y"
+while (lagi == "Y"):
+    os.system("cls")
+    judul()
+    ut = 0
+    ut = menu_utama()
+    if(ut == 1):
+        stat_akun = login_cust()
+        if(stat_akun.upper() == "Y"):
+            akunY, tr, nama, n_identitas, j_identitas, akun = custY()
+            if(akunY == True):
+                login_berhasil()
+                chs, truuuu = menu_cust(nama)
+                if(chs == 1):
+                    # jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek = menu_sewa(akun, nama)
+                    # print("871", jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek)
+                    while True:
+                        # print("873", jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek)
+                        jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek = menu_sewa(akun, nama)
+                        if cek:
+                            break
+                        else:
+                            pass
+                    total, jenis_pembayaran = cust_byr(jenis_pembayaran, bill, lama_hari)
+                    byr_stat, total, via, no, idrek = pembayaran(total)
+                    input("Tekan enter untuk cetak struk... ")
+                    print()
+                    struk(nama, j_identitas, n_identitas, kendaraan, plat, tgl_awal, tgl_akhir, jenis_pembayaran, byr_stat, via, total, idrek, lama_hari)
+                    input("Tekan enter untuk kembali ke menu utama! ")
+                elif(chs == 2):
+                    jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, true, bill, lama_hari = menu_pengembalian(akun, nama)
+                    total, jenis_pembayaran = cust_byr(jenis_pembayaran, bill, lama_hari)
+                    byr_stat, total, via, no, idrek = pembayaran(total)
+                    input("Tekan enter untuk cetak struk... ")
+                    print()
+                    struk(nama, j_identitas, n_identitas, kendaraan, plat, tgl_awal, tgl_akhir, jenis_pembayaran, byr_stat, via, total, idrek, lama_hari)
+                    input("Tekan enter untuk kembali ke menu utama! ")
+                elif(chs == 3):
+                    print("\nBerhasil Log Out!")
+                    input("Tekan enter untuk kembali ke menu utama! ")
+                else:
+                    print("Input anda salah!")
+        elif(stat_akun.upper() == "T"):
+            custT()
+            input("Tekan enter untuk kembali ke menu utama! ")
+        else:
+            print("Input anda salah!")
+    elif(ut == 2):
+        log, st = login_admin()
+        if(log == True):
+            login_berhasil()
+            ma = menu_admin()
+            if(ma == 1):
+                T_armada()
+                input("\nTekan enter untuk kembali ke menu utama! ")
+            elif(ma == 2):
+                K_armada()
+                input("\nTekan enter untuk kembali ke menu utama! ")
+            elif(ma == 3):
+                U_data()
+                input("\nTekan enter untuk kembali ke menu utama! ")
+            elif(ma == 4):
+                ganti_pwadmin()
+                input("\nTekan enter untuk kembali ke menu utama! ")
+            elif(ma == 5):
+                print("\nBerhasil Log Out!")
+                input("Tekan enter untuk kembali ke menu utama! ")
+        else:
+            input("Tekan enter untuk kembali ke menu utama! ")
+    elif(ut == 3):
+        lupa_pw()
+        input("\nTekan enter untuk kembali ke menu utama! ")
+    elif(ut == 4):
+        print("Terima kasih telah menggunakan program kami, sampai jumpa kembali!")
+        print("Program ditutup...")
+        sys.exit()
+    else:
+        print("Input anda salah!")
+
+    print("                    Sampai jumpa kembali!")
+
