@@ -1,2 +1,0 @@
-username=Admin123
-password=Admin123
