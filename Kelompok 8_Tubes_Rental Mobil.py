@@ -378,4 +378,202 @@ def menu_pengembalian(akun, nama):
             print("Mohon masukkan nomor mobil yang tepat")
     return jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, True, bill, lama_hari
 
+def login_admin():
+    os.system("cls")
+    log = True
+    print("=====================")
+    print("==== Login Admin ====")
+    print("=====================")
+    file_pass_Admin = open("File Password Admin.txt", "r")
+    data_str = file_pass_Admin.readlines()
+    data = data_str[0]
+    datanw = json.loads(data)
+    file_pass_Admin.close()
+    user_Admin = str(datanw["username"])
+    pass_Admin = str(datanw["password"])
+    perc = 0
+    ladmin = True
+    while ladmin == True:
+        try:
+            username = str(input("Username : "))
+            password = str(input("Password : "))
+        except:
+            loading()
+            login_gagal()
+            print("==== Maaf Username atau Password Anda Salah! ====")
+            perc += 1
+        else:
+            if ((username == user_Admin) and (password == pass_Admin)):
+                log = True
+                loading()
+                break
+            else:
+                loading()
+                login_gagal()
+                print("==== Maaf Username atau Password Anda Salah! ====")
+                log = False
+                perc += 1
+                pass
+            if (perc == 3):
+                print("Terlalu banyak percobaan!")
+                ladmin = False
+                input("Tekan enter untuk kembali ke menu utama!")
+    return log, True
+
+
+def ganti_pwadmin():
+    print("==============================")
+    print("==== Ganti Password Admin ====")
+    print("==============================")
+    file_pass_Admin = open("File Password Admin.txt", "w")
+    user_baru = str(input("Masukkan username baru : "))
+    pass_baru = str(input("Masukkan password baru : "))
+    data_pw = '{"username" : "%s", "password" : "%s"}\n\n==== Username dan Password Admin ====\nUsername : %s\nPassword : %s' % (
+    user_baru, pass_baru, user_baru, pass_baru)
+    file_pass_Admin.writelines(data_pw)
+    file_pass_Admin.close()
+    succ_pw()
+
+
+def menu_admin():
+    print("====================")
+    print("==== Menu Admin ====")
+    print("====================")
+    print("1. Menambah armada")
+    print("2. Mengurangi armada")
+    print("3. Update data kendaraan")
+    print("4. Ganti password admin")
+    print("5. Log out")
+    while True:
+        try:
+            ma = int(input("Masukkan menu yang anda pilih [1/2/3/4/5] : "))
+        except:
+            print("Mohon masukkan angka 1/2/3/4/5")
+        else:
+            if ma in [1, 2, 3, 4, 5]:
+                break
+            else:
+                print("Mohon masukkan angka 1/2/3/4/5")
+                pass
+    return ma
+
+
+def T_armada():
+    print("========================")
+    print("==== Tambah Armada ====")
+    print("========================")
+    # data_kendaraan()
+    pd.options.mode.chained_assignment = None
+    data = pd.read_excel("data_kendaraan.xlsx", sheet_name="Sheet1", header=0)
+    df = pd.DataFrame(data)
+    print(df.to_string(index=False))
+
+    # tambah mobil
+    print("===== Masukkan data mobil baru =====")
+    mob = str(input("Masukkan jenis mobil: "))
+    hrg = str(input("Masukkan harga sewa mobil: "))
+    thn = str(input("Masukkan tahun mobil: "))
+    kap = str(input("Masukkan kapasitas penumpang mobil: "))
+    no_pol = str(input("Masukkan nomor polisi mobil: "))
+    dummy = str({"akun": ["awal", "akhir"]})
+    stat = "Tersedia"
+    mobil_baru = ["dor", mob, hrg, thn, kap, no_pol, stat, dummy]
+    jlh_mbl = len(df["Harga"])
+    print(jlh_mbl)
+    print("Jumlah mobil saat ini", jlh_mbl)
+    df.loc[(jlh_mbl + 1)] = mobil_baru
+    df = df.sort_values(by="Jenis")
+    df["No"] = [x for x in range(1, len(df) + 1)]
+    df = df.reset_index(drop=True)
+    export3 = pd.ExcelWriter("data_kendaraan.xlsx")
+    df.to_excel(export3, index=False)
+    export3.save()
+    print("Data mobil terbaru:\n", df.to_string(index=False))
+
+
+def K_armada():
+    print("=======================")
+    print("==== Kurangi Armada ====")
+    print("=======================")
+    # data_kendaraan()
+    pd.options.mode.chained_assignment = None
+    data = pd.read_excel("data_kendaraan.xlsx", header=0)
+    df = pd.DataFrame(data)
+    print(df.to_string(index=False))
+    while True:
+        try:
+            jml = int(input("Pilih nomor kendaraan yang akan dikurangi: "))
+        except:
+            print("Mohon masukkan angka saja")
+        else:
+            break
+    pd.options.mode.chained_assignment = None
+
+    df = df.drop(jml - 1)
+    df["No"] = [x for x in range(1, len(df) + 1)]
+
+    df = df.reset_index(drop=True)
+    export4 = pd.ExcelWriter("data_kendaraan.xlsx")
+    df.to_excel(export4, index=False)
+    export4.save()
+    print("Data mobil terbaru:\n", df.to_string(index=False))
+
+
+def U_data():
+    print("===============================")
+    print("==== Update Data Kendaraan ====")
+    print("===============================")
+    pd.options.mode.chained_assignment = None
+    data = pd.read_excel("data_kendaraan.xlsx", index_col="No", sheet_name="Sheet1", header=0)
+    df = pd.DataFrame(data)
+    print(df.to_string(index=False))
+
+    update = int(input("Mobil yang akan diubah datanya[ex:1]:"))
+    print("Berikut data mobil yang ingin Anda ubah:")
+    print(df.iloc[update - 1])
+    print("1. Ubah jenis mobil")
+    print("2. Ubah harga sewa mobil")
+    print("3. Ubah tahun mobil")
+    print("4. Ubah kapasitas mobil")
+    print("5. Ubah No polisi mobil")
+    print("6. Ubah status mobil")
+    ud = True
+    while ud == True:
+        try:
+            upd = int(input("Masukkan menu yang Anda ingin ubah (1/2/3/4/5/6) : "))
+        except:
+            print("Input anda salah!")
+        else:
+            if (upd == 1):
+                jns_baru = str(input("Masukkan jenis mobil terbaru:"))
+                df["Jenis"][update] = jns_baru
+                ud = False
+            elif (upd == 2):
+                hrg_baru = str(input("Masukkan harga mobil terbaru:"))
+                df["Harga"][update] = hrg_baru
+                ud = False
+            elif (upd == 3):
+                thn_baru = str(input("Masukkan tahun mobil terbaru:"))
+                df["Tahun"][update] = thn_baru
+                ud = False
+            elif (upd == 4):
+                kps_baru = str(input("Masukkan kapasitas mobil terbaru:"))
+                df["Kapasitas"][update] = kps_baru
+                ud = False
+            elif (upd == 5):
+                nopol_baru = str(input("Masukkan no polisi mobil terbaru:"))
+                df["No Polisi"][update] = nopol_baru
+                ud = False
+            elif (upd == 6):
+                stat_baru = str(input("Masukkan status mobil terbaru:"))
+                df["Status"][update] = stat_baru
+                ud = False
+            else:
+                print("Input anda salah!")
+
+    # ubah data mobil
+    export5 = pd.ExcelWriter("data_kendaraan.xlsx")
+    df.to_excel(export5, index=False)
+    export5.save()
+    print(df)
 
