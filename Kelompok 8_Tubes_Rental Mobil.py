@@ -577,3 +577,194 @@ def U_data():
     export5.save()
     print(df)
 
+def change_pwcust(username, identitas, df):
+    for i in range(1, len(df["Username"]) + 1):
+        if ((username == df["Username"][i]) and (identitas == df["No. Identitas"][i])):
+            pw_baru = str(input("Masukkan Password baru : "))
+            df["Password"][i] = pw_baru
+            ab = True
+            break
+        else:
+            ab = False
+    return ab
+
+
+def lupa_pw():
+    print("============================")
+    print("==== Menu Lupa Password ====")
+    print("============================")
+    pd.options.mode.chained_assignment = None  # default='warn', supaya tdk ada warning saat mengganti value
+    file = "data_pelanggan.xlsx"
+    data_pelanggan = pd.read_excel(file, index_col="No").loc[:, "Nama":]
+    df = pd.DataFrame(data_pelanggan)
+    # mengecek data
+    while True:
+        try:
+            username = str(input("Masukkan username anda : "))
+            identitas = int(input("Masukkan no. id anda yang telah didaftarkan (KTP/SIM) : "))
+        except:
+            loading()
+            print("\n==== Maaf Username atau Nomor ID Anda Salah! ====\n")
+        else:
+            ab = change_pwcust(username, identitas, df)
+            if (ab == True):
+                loading()
+                succ_pw()
+                break
+            else:
+                loading()
+                fail_pw()
+                pass
+    export7 = pd.ExcelWriter("data_pelanggan.xlsx")
+    df.to_excel(export7)
+    export7.save()
+    return True
+
+
+def succ_pw():
+    os.system("cls")
+    print("====================================")
+    print("==== Password berhasil diganti! ====")
+    print("====================================")
+
+
+def fail_pw():
+    os.system("cls")
+    print("=============================================")
+    print("====      Gagal mengganti password!      ====")
+    print("==== Username atau ID Anda Mungkin Salah ====")
+    print("=============================================")
+
+
+def tunai(total):
+    print("\n=== Metode bayar non tunai ===")
+    print("Tagihan anda sebesar Rp %d" % total)
+    print("Bayar dengan uang pas!")
+    via = " "
+    idrek = " "
+    no = " "
+    lptun = True
+    while lptun == True:
+        try:
+            bayar = int(input("Masukkan jumlah uang yang anda bayarkan : "))
+            change = bayar - total
+        except:
+            print("Bayar dengan jumlah uang yang sesuai!")
+        else:
+            if (change == 0):
+                print("Anda berhasil membayar tagihan sebesar Rp %d" % total)
+                print("terima kasih telah membayar dengan uang pas!")
+                break
+            elif (change > 0):
+                print("Anda berhasil membayar tagihan sebesar Rp %d" % total)
+                print("Jangan lupa ambil kembalian anda sebesar Rp %d, terima kasih!" % change)
+                break
+            else:
+                print("Bayar dengan jumlah uang yang sesuai!")
+                pass
+    return total, via, no, idrek
+
+
+def nontunai(total):
+    truu = True
+    print("\n=== Metode bayar non tunai ===")
+    print("1. Kartu Kredit")
+    print("2. Kartu Debit")
+    print("3. Gopay")
+    print("4. OVO")
+    print("5. Shopee Pay")
+    print("6. Dana\n")
+    print("Tagihan anda sebesar Rp %d" % total)
+    while truu == True:
+        try:
+            met = int(input("Pilih nomor metode bayar yang diinginkan [1/2/3/4/5/6] : "))
+        except:
+            print("Mohon masukkan angka [1/2/3/4/5/6]!")
+        else:
+            if (met not in [1, 2, 3, 4, 5, 6]):
+                print("Mohon masukkan angka [1/2/3/4/5/6]!")
+                pass
+            else:
+                truu = False
+    if (met == 1):
+        via = "Kartu Kredit"
+        no = str(input("Masukkan nomor rekening anda : "))
+        idrek = str(input("Masukkan nama pemilik kartu rekening : "))
+        bank = str(input("Masukkan nama bank : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        processing_bayar()
+        print(
+            "\nPembayaran melalui kartu kredit bank %s nomor rekening %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (
+            bank, no, idrek.title(), total))
+    elif (met == 2):
+        via = "Kartu Debit"
+        no = str(input("Masukkan nomor rekening anda : "))
+        idrek = str(input("Masukkan nama pemilik kartu rekening : "))
+        bank = str(input("Masukkan nama bank : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        processing_bayar()
+        print(
+            "\nPembayaran melalui kartu debit bank %s nomor rekening %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (
+            bank, no, idrek.title(), total))
+    elif (met == 3):
+        via = "Gopay"
+        no = str(input("Masukkan nomor Gopay anda : "))
+        idrek = str(input("Masukkan nama pemilik akun Gopay : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        processing_bayar()
+        print("\nPembayaran melalui Gopay %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (
+        no, idrek.title(), total))
+    elif (met == 4):
+        via = "Ovo"
+        no = str(input("Masukkan nomor OVO anda : "))
+        idrek = str(input("Masukkan nama pemilik akun OVO : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        processing_bayar()
+        print(
+            "\nPembayaran melalui OVO %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (no, idrek.title(), total))
+    elif (met == 5):
+        via = "Shopee Pay"
+        no = str(input("Masukkan nomor Shopee Pay anda : "))
+        idrek = str(input("Masukkan nama pemilik akun Shopee Pay : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        processing_bayar()
+        print("\nPembayaran melalui Shopee Pay %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (
+        no, idrek.title(), total))
+    elif (met == 6):
+        via = "Dana"
+        no = str(input("Masukkan nomor Dana anda : "))
+        idrek = str(input("Masukkan nama pemilik akun Dana : "))
+        print("Tunggu sebentar pembayaran sedang diproses...")
+        processing_bayar()
+        print(
+            "\nPembayaran melalui Dana %s atas nama %s sebesar Rp %d berhasil dibayarkan!" % (no, idrek.title(), total))
+    else:
+        print("Input salah!")
+        pembayaran()
+    return total, via, truu, no, idrek
+
+
+def pembayaran(total):
+    print("=== Pembayaran ===")
+    print("1. Tunai")
+    print("2. Non tunai")
+    pj = True
+    while pj == True:
+        try:
+            byr = int(input("Pilih metode pembayaran [1/2] : "))
+        except:
+            print("Masukkan input yang valid!")
+        else:
+            if (byr == 1):
+                total, via, no, idrek = tunai(total)
+                byr_stat = "Tunai"
+                pj = False
+            elif (byr == 2):
+                total, via, truu, no, idrek = nontunai(total)
+                byr_stat = "Non Tunai"
+                pj = False
+            else:
+                print("Masukkan input yang valid!")
+                pj == True
+    print("\n")
+    return byr_stat, total, via, no, idrek
