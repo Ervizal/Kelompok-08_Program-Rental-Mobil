@@ -11,26 +11,29 @@ import json
 
 
 def judul():
+    #Menampilkan judul
     os.system("cls")
     adr = "Jl. Jalan Terus Biar Asik No. 12 Kota Surabaya"
     print("=====================================================")
     print("========== PT NGABERS BRAKTAKTAK AND FREND ==========")
-    print(adr.center(53))
+    print(adr.center(53))                                                    #Agar dapat tertulis rapih di tengah
     print("=====================================================\n")
 
 
 def menu_utama():
+    #Menampilkan menu utama 
     mut = True
     print("====================")
     print("==== Menu Utama ====")
     print("====================")
-    jam = datetime.datetime.now()
-    print(jam.strftime("%A, %d %B %Y %H:%M:%S"))
+    jam = datetime.datetime.now()                                           #Mengimpor local time dari komputer saat dioperasikan
+    print(jam.strftime("%A, %d %B %Y %H:%M:%S"))                            #Menampilkan local time dari komputer saat dioperasikan
     print("1. Login customer")
     print("2. Login admin")
     print("3. Lupa password customer")
     print("4. Exit program")
     while mut == True:
+        # Looping yang berungsi untuk menampilkan "Mohon masukkan angka 1/2/3/4" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan erlanjut 
         try:
             ut = int(input("Masukkan menu yang anda pilih (1/2/3/4) : "))
         except:
@@ -41,38 +44,43 @@ def menu_utama():
             else:
                 print("Mohon masukkan angka 1/2/3/4")
                 pass
-    return ut
+    return ut                                                               #Mengembalikan variabel "ut" untuk digunakan pada tahap selanjutnya
 
 
 def login_cust():
+    #Menampilkan menu log in customer
+    #Menanyakan kepada user apakah sudah memiliki akun atau belum
     os.system("cls")
     print("========================")
     print("==== Login customer ====")
     print("========================")
     stat_akun = ""
     while True:
+        #Looping yang berfungsi untuk menampilkan "Apakah anda sudah memiliki akun (Y/T)" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         if stat_akun == "Y" or stat_akun == "T":
             break
         else:
             stat_akun = input("Apakah anda sudah memiliki akun (Y/T) : ")
             stat_akun = stat_akun.upper()
-    return stat_akun
+    return stat_akun                                                        #Mengembalikan variabel "stat_akun" untuk proses berikutnya
 
 
 def custY():
+    #Menampilkan menu apabila customer menginput "Y"
     os.system("cls")
     print("========================")
     print("==== Login customer ====")
     print("========================")
-    pd.options.mode.chained_assignment = None  # default='warn', supaya tdk ada warning saat mengganti value
+    pd.options.mode.chained_assignment = None                              #default='warn', supaya tdk ada warning saat mengganti value
     file = "data_pelanggan.xlsx"
-    data_pelanggan = pd.read_excel(file, index_col="No").loc[:, "Nama":]
-    df = pd.DataFrame(data_pelanggan)
+    data_pelanggan = pd.read_excel(file, index_col="No").loc[:, "Nama":]   #Program membuka file excel dengan menggunakan pandas 
+    df = pd.DataFrame(data_pelanggan)                                      #Dijadikan DataFrame
     # mengecek data
-    perc = 0
+    perc = 0                                                               #Untuk mengecek percobaan log in yang apabila username dan password yang diinputkan tidak tepat, variabel "perc" akan ter-increment 
     lgn = True
     cy = True
     while cy == True:
+        #Looping yang berfungsi untuk menampilkan "Maaf Username atau Password Anda Salah!" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             username = str(input("Username : "))
             password = str(input("Password : "))
@@ -94,7 +102,7 @@ def custY():
                 lgn = False
                 perc += 1
                 pass
-            if (perc == 3):
+            if (perc == 3):                                             #Jika nilai variabel "perc" = 3 atau 3x percobaan salah, program akan kembali ke menu utama secara otomatis
                 print("Terlalu banyak percobaan login!")
                 cy = False
                 input("Tekan enter untuk kembali ke menu utama! ")
@@ -102,7 +110,10 @@ def custY():
 
 
 def cek_login(username, password, df):
+    #Untuk mengecek akun customer (username dan password) apakah ada di database dan apakah username dan password yang diinputkan sesuai atau tidak
+    #df yang merupakan DataFrame dari database pelanggan, kita gunakan untuk mengecek kesesuaian username dan password 
     for i in range(1, len(df["Username"]) + 1):
+        #Mengecek data yang teradapat pada database mulai dari indeks pertama hingga terakhir untuk mengecek kesesuaian username dan password 
         if ((username == df["Username"][i]) and (password == df["Password"][i])):
             nama = df["Nama"][i]
             akun = df["Username"][i]
@@ -121,21 +132,25 @@ def cek_login(username, password, df):
 
 
 def custT():
+    #Menampilkan menu apabila customer tidak memiliki akub
+    #Menyajikan menu pembuatan akun baru 
     os.system("cls")
     val = True
     print("========================")
     print("==== Pembuatan akun ====")
     print("========================")
-    file = "data_pelanggan.xlsx"
-    data_pelanggan = pd.read_excel(file)
-    df = pd.DataFrame(data_pelanggan)
+    file = "data_pelanggan.xlsx"                                        
+    data_pelanggan = pd.read_excel(file)                                #Membaca file excel "data_pelanggan.xlsx" menggunakan pandas
+    df = pd.DataFrame(data_pelanggan)                                   #Dijadikan DataFrame
 
     while True:
+        #Memeriksa apakah username yang baru dibuat sudah ada atau belum pada database
         user = str(input("username : "))
         if user in list(df["Username"].values):
             print("username sudah ada")
         else:
             break
+    #Input data-data yang dibutuhkan untuk keperluan pembuatan akun baru
     password = str(input("password : "))
     nama = str(input("nama lengkap : "))
     nama = nama.title()
@@ -143,6 +158,7 @@ def custT():
     alamat = alamat.title()
     cjk = True
     while cjk == True:
+        #Memastikan data jenis kelamin dimasukkan dengan tepat sesuai kriteria (L/P) yang telah disediakan program
         try:
             jk = str(input("jenis kelamin [L/P]: "))
         except:
@@ -162,10 +178,10 @@ def custT():
     identitas = str(input("pilih kartu identitas (SIM/KTP) : "))
     no_id = str(input("no identitas %s : " % identitas.upper()))
     email = str(input("email : "))
-    while validate_email(email) == False:
+    while validate_email(email) == False:                                       #Mengecek apakah email yang dimasukkan sudah seesuai atau belum (pengecekan dilakukan berdasarkan ada tidaknya domain)
         email = str(input("masukkan email yang tepat : "))
 
-    df.loc[len(df.index)] = [len(df) + 1, nama, identitas, no_id, user, password, email, alamat, jenis_kelamin]
+    df.loc[len(df.index)] = [len(df) + 1, nama, identitas, no_id, user, password, email, alamat, jenis_kelamin]     #Menambahkan akun yang baru dengan menambah baris baru pada database
     export = pd.ExcelWriter(file)
     df.to_excel(export, index=False)
     export.save()
@@ -175,18 +191,21 @@ def custT():
 
 
 def login_berhasil():
+    #Menampilkan keterangan log in berhasil
     os.system("cls")
-    print("==== Login Berhasil! ====\n")
-    time.sleep(1)
+    print("==== Login Berhasil! ====\n") 
+    time.sleep(1)                                       #Membuat jeda waktu 1 detik untuk menampilkan "==== Login Berhasil! ====\n" setelah menu sebelumnya
 
 
 def login_gagal():
+    #Menampilkan keterangan log in gagal
     os.system("cls")
     print("==== Login Gagal! ====")
     time.sleep(1)
 
 
 def menu_cust(nama):
+    #Menampilkan fitur-fitur yang terdapat di menu customer
     os.system("cls")
     print("============================")
     print("==== Selamat Datang %s! ====" % nama)
@@ -194,7 +213,8 @@ def menu_cust(nama):
     print("1. Penyewaan mobil")
     print("2. Pengembalian mobil")
     print("3. Log out")
-    while True:
+    while True
+    #Looping yang berfungsi untuk menampilkan "Mohon masukkan angka 1/2/3" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             chs = int(input("Masukkan menu yang anda pilih (1/2/3) : "))
         except:
@@ -237,6 +257,7 @@ def cek_bisa_pesan(rentang_waktu12, rentang_waktu34):
 
 
 def menu_sewa(akun, nama):
+    #Menampilkan menu penyewaan
     os.system("cls")
     jenis_pembayaran = "DP Awal"
     print("========================")
@@ -248,6 +269,7 @@ def menu_sewa(akun, nama):
     kolom.remove("Penyewa")
     print(df.to_string(index=False, columns=kolom))
     while True:
+        #Looping yang berfungsi untuk menampilkan "Mohon masukkan angka" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             no_mobil = int(input("Masukkan nomor mobil yang anda pilih: "))
         except:
@@ -326,6 +348,7 @@ def menu_sewa(akun, nama):
 
 
 def menu_pengembalian(akun, nama):
+    #Menampilkan menu pengembalian 
     os.system("cls")
     jenis_pembayaran = "Pelunasan"
     print("===========================")
@@ -417,25 +440,26 @@ def login_admin():
             if (perc == 3):
                 print("Terlalu banyak percobaan!")
                 ladmin = False
-                input("Tekan enter untuk kembali ke menu utama!")
     return log, True
 
 
 def ganti_pwadmin():
+    #Menampilkan menu ketika admin ingin mengganti password
     print("==============================")
     print("==== Ganti Password Admin ====")
     print("==============================")
-    file_pass_Admin = open("File Password Admin.txt", "w")
-    user_baru = str(input("Masukkan username baru : "))
+    file_pass_Admin = open("File Password Admin.txt", "w")              #Program membuka dokumen "File Password Admin.txt"
+    user_baru = str(input("Masukkan username baru : "))                 
     pass_baru = str(input("Masukkan password baru : "))
     data_pw = '{"username" : "%s", "password" : "%s"}\n\n==== Username dan Password Admin ====\nUsername : %s\nPassword : %s' % (
-    user_baru, pass_baru, user_baru, pass_baru)
+    user_baru, pass_baru, user_baru, pass_baru)                         #Program menginput data username dan password yang baru ke dalam dokumen "File Password Admin.txt"
     file_pass_Admin.writelines(data_pw)
     file_pass_Admin.close()
     succ_pw()
 
 
 def menu_admin():
+    #Menampilkan fitur-fitur yang terdapat di menu admin 
     print("====================")
     print("==== Menu Admin ====")
     print("====================")
@@ -445,6 +469,7 @@ def menu_admin():
     print("4. Ganti password admin")
     print("5. Log out")
     while True:
+         #Looping yang berfungsi untuk menampilkan "Mohon masukkan angka 1/2/3/4/5 apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             ma = int(input("Masukkan menu yang anda pilih [1/2/3/4/5] : "))
         except:
@@ -459,13 +484,14 @@ def menu_admin():
 
 
 def T_armada():
+    #Menampilkan menu tambah armada
     print("========================")
     print("==== Tambah Armada ====")
     print("========================")
     # data_kendaraan()
     pd.options.mode.chained_assignment = None
-    data = pd.read_excel("data_kendaraan.xlsx", sheet_name="Sheet1", header=0)
-    df = pd.DataFrame(data)
+    data = pd.read_excel("data_kendaraan.xlsx", sheet_name="Sheet1", header=0)              #Membuka dokumen "data_kendaraan.xlsx"
+    df = pd.DataFrame(data)                                                                  #Menjadikannya DataFrame
     print(df.to_string(index=False))
 
     # tambah mobil
@@ -477,12 +503,12 @@ def T_armada():
     no_pol = str(input("Masukkan nomor polisi mobil: "))
     dummy = str({"akun": ["awal", "akhir"]})
     stat = "Tersedia"
-    mobil_baru = ["dor", mob, hrg, thn, kap, no_pol, stat, dummy]
+    mobil_baru = ["dor", mob, hrg, thn, kap, no_pol, stat, dummy]                     
     jlh_mbl = len(df["Harga"])
     print(jlh_mbl)
     print("Jumlah mobil saat ini", jlh_mbl)
-    df.loc[(jlh_mbl + 1)] = mobil_baru
-    df = df.sort_values(by="Jenis")
+    df.loc[(jlh_mbl + 1)] = mobil_baru                                      #Mengimpor data mobil baru yang ditambahkan ke dalam database
+    df = df.sort_values(by="Jenis")                                         #Mengurutkan data mobil terbaru sesuai dengan urutan abjadnya pada kriteria "jenis"
     df["No"] = [x for x in range(1, len(df) + 1)]
     df = df.reset_index(drop=True)
     export3 = pd.ExcelWriter("data_kendaraan.xlsx")
@@ -492,6 +518,7 @@ def T_armada():
 
 
 def K_armada():
+    #Menampilan menu kurangi armada
     print("=======================")
     print("==== Kurangi Armada ====")
     print("=======================")
@@ -501,6 +528,7 @@ def K_armada():
     df = pd.DataFrame(data)
     print(df.to_string(index=False))
     while True:
+        #Looping yang berungsi untuk menampilkan "Mohon masukkan angka saja" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             jml = int(input("Pilih nomor kendaraan yang akan dikurangi: "))
         except:
@@ -509,7 +537,7 @@ def K_armada():
             break
     pd.options.mode.chained_assignment = None
 
-    df = df.drop(jml - 1)
+    df = df.drop(jml - 1)                               #Menghapus baris data mobil yang dihapus
     df["No"] = [x for x in range(1, len(df) + 1)]
 
     df = df.reset_index(drop=True)
@@ -520,6 +548,7 @@ def K_armada():
 
 
 def U_data():
+    #Menampilkan menu update data
     print("===============================")
     print("==== Update Data Kendaraan ====")
     print("===============================")
@@ -539,33 +568,34 @@ def U_data():
     print("6. Ubah status mobil")
     ud = True
     while ud == True:
+        #Looping yang berungsi untuk menampilkan "Input anda salah!" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             upd = int(input("Masukkan menu yang Anda ingin ubah (1/2/3/4/5/6) : "))
         except:
             print("Input anda salah!")
         else:
             if (upd == 1):
-                jns_baru = str(input("Masukkan jenis mobil terbaru:"))
-                df["Jenis"][update] = jns_baru
+                jns_baru = str(input("Masukkan jenis mobil terbaru:"))          
+                df["Jenis"][update] = jns_baru                                  #Memperbarui jenis yang terakhir diubah
                 ud = False
             elif (upd == 2):
                 hrg_baru = str(input("Masukkan harga mobil terbaru:"))
-                df["Harga"][update] = hrg_baru
+                df["Harga"][update] = hrg_baru                                   #Memperbarui harga yang terakhir diubah
                 ud = False
             elif (upd == 3):
                 thn_baru = str(input("Masukkan tahun mobil terbaru:"))
-                df["Tahun"][update] = thn_baru
+                df["Tahun"][update] = thn_baru                                   #Memperbarui tahun yang terakhir diubah
                 ud = False
             elif (upd == 4):
                 kps_baru = str(input("Masukkan kapasitas mobil terbaru:"))
-                df["Kapasitas"][update] = kps_baru
+                df["Kapasitas"][update] = kps_baru                               #Memperbarui kapasitas yang terakhir diubah
                 ud = False
             elif (upd == 5):
-                nopol_baru = str(input("Masukkan no polisi mobil terbaru:"))
+                nopol_baru = str(input("Masukkan no polisi mobil terbaru:"))        #Memperbarui no polisi yang terakhir diubah
                 df["No Polisi"][update] = nopol_baru
                 ud = False
             elif (upd == 6):
-                stat_baru = str(input("Masukkan status mobil terbaru:"))
+                stat_baru = str(input("Masukkan status mobil terbaru:"))            #Memperbarui status yang terakhir diubah
                 df["Status"][update] = stat_baru
                 ud = False
             else:
