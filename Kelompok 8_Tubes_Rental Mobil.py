@@ -612,6 +612,7 @@ def U_data():
     print(df)
 
 def change_pwcust(username, identitas, df):
+    # mengganti password customer
     for i in range(1, len(df["Username"]) + 1):
         if ((username == df["Username"][i]) and (identitas == df["No. Identitas"][i])):
             pw_baru = str(input("Masukkan Password baru : "))
@@ -624,6 +625,7 @@ def change_pwcust(username, identitas, df):
 
 
 def lupa_pw():
+    # menu lupa password customer
     print("============================")
     print("==== Menu Lupa Password ====")
     print("============================")
@@ -633,6 +635,7 @@ def lupa_pw():
     df = pd.DataFrame(data_pelanggan)
     # mengecek data
     while True:
+        # Looping yang berungsi untuk menampilkan "Maaf Username atau Nomor ID Anda Salah!" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             username = str(input("Masukkan username anda : "))
             identitas = int(input("Masukkan no. id anda yang telah didaftarkan (KTP/SIM) : "))
@@ -656,6 +659,7 @@ def lupa_pw():
 
 
 def succ_pw():
+    # menampilkan keterangan berhasil mengganti password
     os.system("cls")
     print("====================================")
     print("==== Password berhasil diganti! ====")
@@ -663,6 +667,7 @@ def succ_pw():
 
 
 def fail_pw():
+    # menampilkan keterengan gagal mengganti password
     os.system("cls")
     print("=============================================")
     print("====      Gagal mengganti password!      ====")
@@ -671,6 +676,7 @@ def fail_pw():
 
 
 def tunai(total):
+    # menu pembayaran secara tunai
     print("\n=== Metode bayar non tunai ===")
     print("Tagihan anda sebesar Rp %d" % total)
     print("Bayar dengan uang pas!")
@@ -679,6 +685,7 @@ def tunai(total):
     no = " "
     lptun = True
     while lptun == True:
+        # looping untuk menghitung pembayaran
         try:
             bayar = int(input("Masukkan jumlah uang yang anda bayarkan : "))
             change = bayar - total
@@ -700,6 +707,7 @@ def tunai(total):
 
 
 def nontunai(total):
+    # menu pembayaran secara nontunai
     truu = True
     print("\n=== Metode bayar non tunai ===")
     print("1. Kartu Kredit")
@@ -710,6 +718,7 @@ def nontunai(total):
     print("6. Dana\n")
     print("Tagihan anda sebesar Rp %d" % total)
     while truu == True:
+        # looping untuk menentukan metode non tunai yang dipilih
         try:
             met = int(input("Pilih nomor metode bayar yang diinginkan [1/2/3/4/5/6] : "))
         except:
@@ -779,11 +788,13 @@ def nontunai(total):
 
 
 def pembayaran(total):
+    # menu untuk memilih metode pembayaran
     print("=== Pembayaran ===")
     print("1. Tunai")
     print("2. Non tunai")
     pj = True
     while pj == True:
+        # looping untuk memilih metode pembayaran
         try:
             byr = int(input("Pilih metode pembayaran [1/2] : "))
         except:
@@ -804,9 +815,11 @@ def pembayaran(total):
     return byr_stat, total, via, no, idrek
 
 def loading():
+    # fungsi untuk menampilkan loading
     done = False
 
     def animate():
+        # menampilkan animasi loading
         for c in itertools.cycle(['|', '/', '-', '\\']):
             if done:
                 break
@@ -819,11 +832,13 @@ def loading():
     time.sleep(4)
     done = True
 
-
+    
 def processing_bayar():
+    # menampilkan animasi proses pembayaran
     done = False
 
     def animate():
+        # proses menampilkan animas pembayaran
         for c in itertools.cycle(['|', '/', '-', '\\']):
             if done:
                 break
@@ -839,6 +854,7 @@ def processing_bayar():
 
 def struk(nama, j_identitas, n_identitas, kendaraan, plat, tgl_awal, tgl_akhir, jenis_pembayaran, byr_stat, via, total,
           idrek, lama_hari):
+    # menampilkan struk pembayaran
     os.system("cls")
     judul = "PT NGABERS BRAKTAKTAK AND FRENDS"
     address = "Jl. Jalan Terus Biar Asik No. 12 Kota Surabaya"
@@ -870,6 +886,7 @@ def struk(nama, j_identitas, n_identitas, kendaraan, plat, tgl_awal, tgl_akhir, 
 
 
 def cust_byr(jenis_pembayaran, bill, lama_hari):
+    # menghitung tagihan yang harus dibayarkan oleh customer
     bill = int(bill)
     asuransi = 0.1 * bill
     total = 0
@@ -883,6 +900,7 @@ def cust_byr(jenis_pembayaran, bill, lama_hari):
 #Bagian Program Utama
 lagi = "Y"
 while (lagi == "Y"):
+    # looping agar selalu kembali ke menu utama
     os.system("cls")
     judul()
     ut = 0
@@ -895,10 +913,7 @@ while (lagi == "Y"):
                 login_berhasil()
                 chs, truuuu = menu_cust(nama)
                 if(chs == 1):
-                    # jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek = menu_sewa(akun, nama)
-                    # print("871", jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek)
                     while True:
-                        # print("873", jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek)
                         jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, cek = menu_sewa(akun, nama)
                         if cek:
                             break
