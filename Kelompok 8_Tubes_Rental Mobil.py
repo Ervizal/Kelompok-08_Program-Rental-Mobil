@@ -609,7 +609,7 @@ def U_data():
     export5 = pd.ExcelWriter("data_kendaraan.xlsx")
     df.to_excel(export5, index=False)
     export5.save()
-    print(df)
+    print(df.to_string(index=False))
 
 def change_pwcust(username, identitas, df):
     # mengganti password customer
