@@ -106,7 +106,7 @@ def custY():
                 print("Terlalu banyak percobaan login!")
                 cy = False
                 input("Tekan enter untuk kembali ke menu utama! ")
-    return lgn, True, nama, n_identitas, j_identitas, akun
+    return lgn, True, nama, n_identitas, j_identitas, akun              #mengembalikan variabel "lgn", "nama", "n_identitas", "j_identitas", dan "akun" untuk tahap selanjutnya
 
 
 def cek_login(username, password, df):
@@ -120,19 +120,19 @@ def cek_login(username, password, df):
             n_identitas = df["No. Identitas"][i]
             j_identitas = df["Identitas (KTP/SIM)"][i]
             aa = True
-            break
+            break                                                       #jika data ditemukan, akan mengembalikan variable "aa" dengan nilai True untuk menandakan bahwa data cocok dengan database
         else:
             nama = "Not Found!"
             n_identitas = ""
             j_identitas = ""
             akun = ""
-            aa = False
+            aa = False                                                  #jika data tidak ditemukan akan mengembalikan variabel "aa" dengan nilai False 
             pass
-    return aa, nama, n_identitas, j_identitas, akun
+    return aa, nama, n_identitas, j_identitas, akun                     #mengembalikan variabel aa, nama, n_identitas, j_identitas, dan akun
 
 
 def custT():
-    #Menampilkan menu apabila customer tidak memiliki akub
+    #Menampilkan menu apabila customer tidak memiliki akun
     #Menyajikan menu pembuatan akun baru 
     os.system("cls")
     val = True
@@ -193,15 +193,15 @@ def custT():
 def login_berhasil():
     #Menampilkan keterangan log in berhasil
     os.system("cls")
-    print("==== Login Berhasil! ====\n") 
-    time.sleep(1)                                       #Membuat jeda waktu 1 detik untuk menampilkan "==== Login Berhasil! ====\n" setelah menu sebelumnya
+    print("\n==== Login Berhasil! ====\n") 
+    time.sleep(1)                                       #Membuat jeda waktu 1 detik untuk menampilkan "\n==== Login Berhasil! ====\n" setelah menu sebelumnya
 
 
 def login_gagal():
     #Menampilkan keterangan log in gagal
     os.system("cls")
-    print("==== Login Gagal! ====")
-    time.sleep(1)
+    print("\n==== Login Gagal! ====")
+    time.sleep(1)                                       #Membuat jeda waktu 1 detik untuk menampilkan "\n"==== Login Gagal! ===="\n" setelah menu sebelumnya
 
 
 def menu_cust(nama):
@@ -225,10 +225,11 @@ def menu_cust(nama):
             else:
                 print("Mohon masukkan angka 1/2/3")
                 pass
-    return chs, True
+    return chs, True                                    #mengembalikan variabel chs untuk tahap selanjutnya
 
 
 def cek_bisa_pesan(rentang_waktu12, rentang_waktu34):
+    #untuk mengecek tanggal pesanan pada armada yang dipilih pelanggan apakah armada tersebut telah disewa, dibooking atau belum
     string12 = rentang_waktu12
     tanggal1, tanggal2 = string12
     tgl1, bln1, thn1 = tanggal1.split("/")
@@ -253,7 +254,7 @@ def cek_bisa_pesan(rentang_waktu12, rentang_waktu34):
     set_tanggal34 = set(lst_tanggal34)
 
     cek = set_tanggal12.isdisjoint(set_tanggal34)
-    return cek
+    return cek                                           #mengembalikan nilai dari variabel cek untuk menentukan status kendaraan sudah disewa, dibooking atau belum
 
 
 def menu_sewa(akun, nama):
@@ -263,11 +264,11 @@ def menu_sewa(akun, nama):
     print("========================")
     print("==== Menu Persewaan ====")
     print("========================")
-    data_mobil = pd.read_excel("data_kendaraan.xlsx")
-    df = pd.DataFrame(data_mobil)
-    kolom = df.columns.tolist()
-    kolom.remove("Penyewa")
-    print(df.to_string(index=False, columns=kolom))
+    data_mobil = pd.read_excel("data_kendaraan.xlsx")   #membaca file database excel
+    df = pd.DataFrame(data_mobil)                       #menjadikan DataFrame
+    kolom = df.columns.tolist()                         #mengubah kolom menjadi list
+    kolom.remove("Penyewa")                             #menghilangkan kolom "Penyewa" agar tidak ditampilkan
+    print(df.to_string(index=False, columns=kolom))     #menampilkan dataframe sebagai string dengan kolom yang baru
     while True:
         #Looping yang berfungsi untuk menampilkan "Mohon masukkan angka" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
@@ -280,36 +281,37 @@ def menu_sewa(akun, nama):
             else:
                 print("Mohon masukkan angka sesuai tabel")
                 pass
-    index_mobil = no_mobil - 1
+    index_mobil = no_mobil - 1                          #karena nomor mobil yang kita gunakan merupakan bilangan asli, sedangkan penomoran index menggunakan bilangan cacah. oleh karena itu, 
     while True:
+        #looping yang berfungsi untuk menampilkan "Mohon masukkan Y/T" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         jenis = input("Pesan untuk hari ini?(Y/T): ")
         if jenis.upper() == "Y":
             x = datetime.datetime.now()
-            date_awal = x.strftime("%d/%m/%Y")
+            date_awal = x.strftime("%d/%m/%Y")          #mengimpor local time komputer sekarang untuk menentukan tanggal awal sewa apabila mulai sewa hari ini
             break
         elif jenis.upper() == "T":
             tgl_awal = int(input("Masukkan tanggal pemesanan: "))
             bln_awal = int(input("Masukkan bulan pemesanan: "))
             thn_awal = int(input("Masukkan tahun pemesanan: "))
-            date_awal = f"{str(tgl_awal).zfill(2)}/{str(bln_awal).zfill(2)}/{thn_awal}"
+            date_awal = f"{str(tgl_awal).zfill(2)}/{str(bln_awal).zfill(2)}/{thn_awal}" #mwngubah tanggal, bulan, dan tahun yang diinput dengan fitur zfill agar angkanya menjadi 2 digit
             break
         else:
             print("Mohon masukkan Y/T")
             pass
 
-    tgl_awal, bln_awal, thn_awal = date_awal.split("/")
+    tgl_awal, bln_awal, thn_awal = date_awal.split("/") #memisahkan tanggal, bulan, dan tahun hasil input menggunakan fitur ".split()"
     d1 = datetime.date(int(thn_awal), int(bln_awal), int(tgl_awal))
 
     lama_hari = int(input("Masukkan lama waktu penyewaan (dalam hari): "))
-    d = datetime.timedelta(days=lama_hari)
+    d = datetime.timedelta(days=lama_hari)              #menentukan tanggal akhir dengan menambahkan lama sewa ke tanggal awal
     d2 = d1 + d
-    date_akhir = f"{d2.day}/{d2.month}/{d2.year}"
-    rentang_sewa = [date_awal, date_akhir]
+    date_akhir = f"{d2.day}/{d2.month}/{d2.year}"       #membuat data tanggal akhir menjadi berformat tanggal
+    rentang_sewa = [date_awal, date_akhir]              
     tgl_awal = str(date_awal)
     tgl_akhir = str(date_akhir)
     sel = df["Penyewa"][index_mobil]
     sel = sel.replace("\'", "\"")
-    sel_dict = json.loads(sel)
+    sel_dict = json.loads(sel)                          
     sel_dict.pop("akun")
     for i in sel_dict.values():
         cek = cek_bisa_pesan(i, rentang_sewa)  # False artinya ada tanggal yang overlap, jd ga bisa pesan
@@ -323,6 +325,7 @@ def menu_sewa(akun, nama):
     print(f"Anda akan menyewa {df['Jenis'][index_mobil]} selama {lama_hari} hari")
     a = True
     while a:
+        #looping untuk menampilkan "Mohon masukkan (Y/T)" apabila user memasukkan input yang salah. apabila user memasukkan input yang benar, program akan berlannjut sesuai pilihan user
         lanjut = input("Apakah anda melanjutkan ke tahap pembayaran?(Y/T): ")
         if lanjut.upper() == "T":
             print("Silahkan melakukan input ulang")
@@ -332,19 +335,19 @@ def menu_sewa(akun, nama):
             if jenis.upper() == "Y":
                 df["Status"][index_mobil] = f"Disewakan kepada {nama}"
 
-            sel_dict.update({akun: rentang_sewa, "akun": ["awal", "akhir"]})
+            sel_dict.update({akun: rentang_sewa, "akun": ["awal", "akhir"]})    #menambahkan data penyewa/booking ke database
             df["Penyewa"][index_mobil] = sel_dict
             plat = df["No Polisi"][index_mobil]
             kendaraan = df["Jenis"][index_mobil]
             bill = int(df["Harga"][index_mobil])
             sel = df["Penyewa"][index_mobil]
-            export = pd.ExcelWriter("data_kendaraan.xlsx")
-            df.to_excel(export, index=False)
-            export.save()
+            export = pd.ExcelWriter("data_kendaraan.xlsx")                      #menulis ulang database
+            df.to_excel(export, index=False)                                    #mengekspor hasil database baru tanpa nomor index
+            export.save()                                                       #menyimpan database
             a = False
         else:
             print("Mohon masukkan (Y/T)")
-    return jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, True
+    return jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari, True    #mengembalikan nilai dari variabel jenis_pembayaran, tgl_awal, tgl_akhir, plat, kendaraan, bill, lama_hari untuk tahap selanjutnya
 
 
 def menu_pengembalian(akun, nama):
@@ -407,16 +410,17 @@ def login_admin():
     print("=====================")
     print("==== Login Admin ====")
     print("=====================")
-    file_pass_Admin = open("File Password Admin.txt", "r")
-    data_str = file_pass_Admin.readlines()
-    data = data_str[0]
-    datanw = json.loads(data)
-    file_pass_Admin.close()
+    file_pass_Admin = open("File Password Admin.txt", "r")                  #membuka file database login admin dengan aturan read only            
+    data_str = file_pass_Admin.readlines()                                  #membaca file database per baris
+    data = data_str[0]                                                      #membaca file database baris pertama
+    datanw = json.loads(data)                                               #melakukan loads database sebagai dictionary dalam variabel "datanw"
+    file_pass_Admin.close()                                                 #menutup file database
     user_Admin = str(datanw["username"])
     pass_Admin = str(datanw["password"])
     perc = 0
     ladmin = True
     while ladmin == True:
+        #looping untuk menampilkan "==== Maaf Username atau Password Anda Salah! ====" apabila username dan password yang dimasukkan tidak sesuai, dan berlanjut ke tahap selanjutnya apabila sesuai database
         try:
             username = str(input("Username : "))
             password = str(input("Password : "))
@@ -424,7 +428,7 @@ def login_admin():
             loading()
             login_gagal()
             print("==== Maaf Username atau Password Anda Salah! ====")
-            perc += 1
+            perc += 1                                                       #terjadi increment setiap kali salah percobaan
         else:
             if ((username == user_Admin) and (password == pass_Admin)):
                 log = True
@@ -437,7 +441,7 @@ def login_admin():
                 log = False
                 perc += 1
                 pass
-            if (perc == 3):
+            if (perc == 3):                                                 #ketika username dan password yang dimasukkan tidak tepat dalam 3x percobaan, program akan otomatis kembali ke menu utama
                 print("Terlalu banyak percobaan!")
                 ladmin = False
     return log, True
@@ -453,8 +457,8 @@ def ganti_pwadmin():
     pass_baru = str(input("Masukkan password baru : "))
     data_pw = '{"username" : "%s", "password" : "%s"}\n\n==== Username dan Password Admin ====\nUsername : %s\nPassword : %s' % (
     user_baru, pass_baru, user_baru, pass_baru)                         #Program menginput data username dan password yang baru ke dalam dokumen "File Password Admin.txt"
-    file_pass_Admin.writelines(data_pw)
-    file_pass_Admin.close()
+    file_pass_Admin.writelines(data_pw)                                 #program menulis ulang file database
+    file_pass_Admin.close()                                             #menutup file database
     succ_pw()
 
 
@@ -480,7 +484,7 @@ def menu_admin():
             else:
                 print("Mohon masukkan angka 1/2/3/4/5")
                 pass
-    return ma
+    return ma                                                       #mengembalikan nilai variabel "ma" untuk tahap selanjutnya
 
 
 def T_armada():
@@ -491,8 +495,8 @@ def T_armada():
     # data_kendaraan()
     pd.options.mode.chained_assignment = None
     data = pd.read_excel("data_kendaraan.xlsx", sheet_name="Sheet1", header=0)              #Membuka dokumen "data_kendaraan.xlsx"
-    df = pd.DataFrame(data)                                                                  #Menjadikannya DataFrame
-    print(df.to_string(index=False))
+    df = pd.DataFrame(data)                                                                 #Menjadikannya DataFrame
+    print(df.to_string(index=False))                                                        #menampilkan data armada tanpa index dan berbentuk string
 
     # tambah mobil
     print("===== Masukkan data mobil baru =====")
@@ -510,10 +514,10 @@ def T_armada():
     df.loc[(jlh_mbl + 1)] = mobil_baru                                      #Mengimpor data mobil baru yang ditambahkan ke dalam database
     df = df.sort_values(by="Jenis")                                         #Mengurutkan data mobil terbaru sesuai dengan urutan abjadnya pada kriteria "jenis"
     df["No"] = [x for x in range(1, len(df) + 1)]
-    df = df.reset_index(drop=True)
-    export3 = pd.ExcelWriter("data_kendaraan.xlsx")
-    df.to_excel(export3, index=False)
-    export3.save()
+    df = df.reset_index(drop=True)                                          #mengurutkan kembali nomor index agar urut kembali
+    export3 = pd.ExcelWriter("data_kendaraan.xlsx")                         #menulis ulang file database
+    df.to_excel(export3, index=False)                                       #mengekspor database
+    export3.save()                                                          #menyimpan database
     print("Data mobil terbaru:\n", df.to_string(index=False))
 
 
