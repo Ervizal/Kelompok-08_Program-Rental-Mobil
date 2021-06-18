@@ -213,7 +213,7 @@ def menu_cust(nama):
     print("1. Penyewaan mobil")
     print("2. Pengembalian mobil")
     print("3. Log out")
-    while True
+    while True:
     #Looping yang berfungsi untuk menampilkan "Mohon masukkan angka 1/2/3" apabila input yang dimasukkan oleh user salah, tetapi jika inputnya benar, program akan berlanjut
         try:
             chs = int(input("Masukkan menu yang anda pilih (1/2/3) : "))
