@@ -677,7 +677,7 @@ def fail_pw():
 
 def tunai(total):
     # menu pembayaran secara tunai
-    print("\n=== Metode bayar non tunai ===")
+    print("\n=== Metode bayar tunai ===")
     print("Tagihan anda sebesar Rp %d" % total)
     print("Bayar dengan uang pas!")
     via = " "
